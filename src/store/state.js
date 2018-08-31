@@ -1,0 +1,61 @@
+const state = {
+  backUrl:null,
+  indexPage:false,
+  userinfo:null,
+
+  // /*独立网点*/
+  // userinfo:{
+  //     "city": "上海市",
+  //     "cityId": "310100",
+  //     "code": "900000",
+  //     "companyCategoryCode": "独立网点",
+  //     "companyCode": "900000",
+  //     "companyId": "6689c965",
+  //     "companyName": "网点测试",
+  //     "district": "青浦区",
+  //     "districtId": "310118",
+  //     "duty": "管理员",
+  //     "faceset": 0,
+  //     "gender": "男",
+  //     "id": "79dd799012ef47579044f9713e72732a",
+  //     "idcard": "123456789123456789",
+  //     "mobile": "18916135036",
+  //     "mobileValiated": 2,
+  //     "needModifyPassword": "0",
+  //     "nickname": "网点测试",
+  //     "parentCompanyCode": "000096",
+  //     "parentCompanyId": "d3832410",
+  //     "province": "上海",
+  //     "provinceId": "310000",
+  //     "realName": "网点测试",
+  //     "userName": "900000"
+  // },
+
+  /*总部*/
+  // userinfo:{
+  //     "city": "上海市",
+  //     "cityId": "310100",
+  //     "code": "2155990082",
+  //     "companyCategoryCode": "总公司",
+  //     "companyCode": "2155",
+  //     "companyId": "6689c965",
+  //     "companyName": "上海申通",
+  //     "district": "青浦区",
+  //     "districtId": "310118",
+  //     "duty": "管理员",
+  //     "email": "1257860839@qq.com",
+  //     "faceset": 0,
+  //     "gender": "男",
+  //     "id": "3a0eebbb32cc40039290b27283a6888b",
+  //     "idcard": "100000000000000000",
+  //     "mobile": "18280024107",
+  //     "mobileValiated": 2,
+  //     "needModifyPassword": "0",
+  //     "nickname": "魏婷婷",
+  //     "province": "上海",
+  //     "provinceId": "310000",
+  //     "realName": "魏婷婷1",
+  //     "userName": "wtingting"
+  // },
+}
+export default state

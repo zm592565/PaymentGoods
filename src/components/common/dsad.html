@@ -1,0 +1,201 @@
+<template>
+    <div id="box_content">
+        <Header title="代收货款" closestate></Header>
+        <TabClass :classlist="classlist" :active="tabactive" @activeindex="getActiveTabindex"></TabClass>
+        <div class="main_box" ref="main_box">
+            <div class="datainfo_box" v-show="tabactive===0">
+                <div class="headerTool">
+                    <div class="user_info">
+                        <h1 class="f_48">您好,</h1>
+                        <p class="f_32">{{$store.state.userinfo.companyName}}</p>
+                    </div>
+                    <div class="tools_btn">
+                        <li class="tool"></li>
+                        <li class="date"></li>
+                    </div>
+                </div>
+                <div class="text_white show_box f_28">
+                    <h1 class="f_48">{{allCount}}</h1>
+                    <p class="f_28 text_c">总部总票数</p>
+                </div>
+                <router-link tag="div" to="/receivingbill" class="row_box">
+                    <div>
+                        <h1 class="f_48 text_main"><cite class="pr_10 f_24">¥</cite><span class="f_bold">{{DeliveryAmount}}</span></h1>
+                        <p class="f_24">
+                            应收<cite class="text_main">派方</cite>货款总额
+                        </p>
+                    </div>
+                    <div>
+                        <p class="f_28">
+                            <cite>票数：</cite><span>{{DeliveryCount}}</span>
+                        </p>
+                        <p class="f_24 text_999 pt_20">{{endTime|changeDate}}</p>
+                    </div>
+                </router-link>
+                <div class="row_box">
+                    <div>
+                        <h1 class="f_48 text_main"><cite class="pr_10 f_24">¥</cite><span class="f_bold">{{SendAmount}}</span></h1>
+                        <p class="f_24">
+                            应收<cite class="text_main">寄方</cite>货款总额
+                        </p>
+                    </div>
+                    <div>
+                        <p class="f_28">
+                            <cite>票数：</cite><span>{{SendCount}}</span>
+                        </p>
+                        <p class="f_24 text_999 pt_20">{{endTime|changeDate}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="collectingSearch" ref="collectingSearch" v-show="tabactive===1">
+                <div class="searchHeader clearfix" ref="searchHeader">
+                    <TabClass :classlist="searchlist" :active="tabsearchactive" @activeindex="getActiveSearchindex"></TabClass>
+                    <ul class="allinfo">
+                        <li><span>2018-07-31</span><cite class="date"></cite></li>
+                        <li><span>江苏省>南京市>雨花台区</span><cite class="tool"></cite></li>
+                        <li class="text_666"><span class="f_24">货款总金额：3592367</span><span class="f_24">总票数：5689268</span></li>
+                    </ul>
+                </div>
+                <div class="list_box" ref="list_box">
+                    <vue-better-scroll ref="scroll" style="height: 100%" :scrollbar="scrollbarObj"  :pullDownRefresh="pullDownRefreshObj" :pullUpLoad="pullUpLoadObj" :startY="parseInt(startY)"  @pullingDown="onPullingDown" @pullingUp="onPullingUp">
+                        <li v-for="(item,index) in 20" :key="index">
+                            <div>
+                                <p class="f_28 text_333">运单号：118112112497</p>
+                                <cite>现金</cite>
+                            </div>
+                            <span>
+                                  <p class="f_40 text_333 pb_10">-56.00</p>
+                                  <p class="f_24 text_FF6868 text_r">已返款</p>
+                              </span>
+                        </li>
+                    </vue-better-scroll>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    import Header from '@/components/common/header'
+    import TabClass from '@/components/common/tabclass'
+    import FunctionMethods from '@/mixins/functionMethods'
+    import List from '@/components/common/list'
+    import VueBetterScroll from 'vue2-better-scroll'
+    import {mapState} from 'vuex';
+    export default {
+        data(){
+            return{
+                tabactive:0,
+                classlist:[{name:'总部代收账单',value:0},{name:'代收状态查询',value:1}],
+                searchlist:[{name:'全部',value:-1},{name:'未收款',value:0},{name:'派方已收',value:1},{name:'已返款',value:2}],
+
+
+                SendAmount:0,
+                SendCount:0,
+                DeliveryAmount:0,
+                DeliveryCount:0,
+                beginTime:'2017-07-24',/*开始和结束默认是今日，正式环境需改,this.$Check.gettimeformate()*/
+                endTime:'2017-07-24',
+                homeprovince:this.$store.state.userinfo.province,
+                homecity:this.$store.state.userinfo.city,
+
+                /*总部代收状态列表属性*/
+                tabsearchactive:0,
+                searchprovince:this.$store.state.userinfo.province,
+                searchcity:this.$store.state.userinfo.city,
+                searchbeginTime:'2017-07-24',
+                searchendTime:'2017-07-24',
+                searchstatus:-1,
+                searchtimeType:'S',
+                pageSize:1,
+                pageNo:20,
+
+                // 这个配置可以开启滚动条，默认为 false。当设置为 true 或者是一个 Object 的时候，都会开启滚动条，默认是会 fade 的
+                scrollbarObj: false,
+                // 这个配置用于做下拉刷新功能，默认为 false。当设置为 true 或者是一个 Object 的时候，可以开启下拉刷新，可以配置顶部下拉的距离（threshold） 来决定刷新时机以及回弹停留的距离（stop）
+                pullDownRefreshObj: {
+                    threshold: 50,
+                    stop: 0
+                },
+                // 这个配置用于做上拉加载功能，默认为 false。当设置为 true 或者是一个 Object 的时候，可以开启上拉加载，可以配置离底部距离阈值（threshold）来决定开始加载的时机
+                pullUpLoadObj: {
+                    threshold: 0,
+                    txt: {
+                        more: '加载更多',
+                        noMore: '没有更多数据了'
+                    }
+                },
+
+                startY: 0,  // 纵轴方向初始化位置
+                scrollToX: 0,
+                scrollToY: 0,
+                scrollToTime: 500,
+
+            }
+        },
+        mixins:[FunctionMethods],
+        created(){
+            /*默认查今日的数据*/
+            this.$store.dispatch('getCompanyBillAll',{siteId:this.$store.state.userinfo.companyid,beginTime:this.beginTime,endTime:this.endTime,province:this.homeprovince,city:this.homecity})
+                .then(res=>{
+                    this.SendAmount=res.SendAmount;
+                    this.SendCount=res.SendCount
+                    this.DeliveryAmount=res.DeliveryAmount
+                    this.DeliveryCount=res.DeliveryCount
+                })
+
+            /*代收状态查询默认全部*/
+            this.$store.dispatch('getListCompany',{beginTime:this.searchbeginTime,endTime:this.searchendTime,province:this.searchprovince,city:this.searchcity,pageSize:this.pageSize,pageNo:this.pageNo,timeType:this.searchtimeType,status:this.searchstatus})
+                .then(res=>{
+                    console.info(res,'aa')
+                })
+
+        },
+        computed:{
+            allCount:function(){
+                return this.SendCount+this.DeliveryCount;
+            }
+        },
+        watch:{
+            'tabactive':function (value) {
+                if(value){
+                    this.$nextTick(()=>{
+                        let main_box=this.$refs.main_box.clientHeight;
+                        let searchHeader=this.$refs.searchHeader.clientHeight ;
+                        this.$refs.list_box.style.height=(main_box-searchHeader)+'px'
+                        this.$refs.scroll.refresh()
+                    })
+                }
+            }
+        },
+        methods:{
+            getActiveTabindex(index){
+                this.tabactive=index;
+            },
+            getActiveSearchindex(index){
+                this.tabsearchactive=index;
+            },
+            onPullingUp(){
+                alert('aaa')
+            },
+
+            onPullingDown(){
+                alert('ccc')
+            },
+
+        },
+        components:{
+            Header,
+            TabClass,
+            FunctionMethods,
+            VueBetterScroll,
+            List
+        }
+    }
+
+</script>
+<style lang="stylus" scoped>
+    @import "~staticPath/css/home.styl";
+    .main_box
+    overflow-y auto
+</style>
+
