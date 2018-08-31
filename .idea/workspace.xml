@@ -374,7 +374,7 @@
     <property name="node.js.selected.package.standard" value="" />
     <property name="javascript.nodejs.core.library.configured.version" value="8.9.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../searchfor_express" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../work-complaints" />
     <property name="list.type.of.created.stylesheet" value="Stylus" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
   </component>
@@ -425,12 +425,12 @@
       <workItem from="1535415650763" duration="36961000" />
       <workItem from="1535502359007" duration="37967000" />
       <workItem from="1535587641363" duration="32931000" />
-      <workItem from="1535675541059" duration="6401000" />
+      <workItem from="1535675541059" duration="6609000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="205008000" />
+    <option name="totallyTimeSpent" value="205216000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -443,6 +443,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13278171" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
