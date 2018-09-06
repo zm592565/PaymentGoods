@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="text_white show_box f_28">
-                    <h1 class="f_48">{{allCount}}</h1>
+                    <h1 class="f_48">{{SendCount}}</h1>
                     <p class="f_28 text_c">总部总票数</p>
                 </div>
                 <div class="row_box">
@@ -37,7 +37,7 @@
                     <div>
                         <h1 class="f_48 text_main"><cite class="pr_10 f_24">¥</cite><span class="f_bold">{{SendAmount}}</span></h1>
                         <p class="f_24">
-                            应收<cite class="text_main">寄方</cite>货款总额
+                            应付<cite class="text_main">寄方</cite>货款总额
                         </p>
                     </div>
                     <div>

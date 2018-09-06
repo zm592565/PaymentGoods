@@ -25,7 +25,6 @@
                 var objs={name:this.list[obj.activeIndex].name,value:dateValue,time:obj.value};
                 this.$set(this.list,obj.activeIndex,objs);
             },
-            /**/
 
         },
         components:{

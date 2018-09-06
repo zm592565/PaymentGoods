@@ -102,7 +102,7 @@ const functions={
     }
 
     /*拦截header头,在此处可以调用vuex里的值*/
-    config.headers['userId']=store.state.userinfo.id;
+    // config.headers['userId']=store.state.userinfo.id;
     var instance = Axios.create(config);
     let HttpSendType=formatHttp=='post'?instance.post:instance.get;
     return HttpSendType(url,formatDate).then(res=>{

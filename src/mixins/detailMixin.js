@@ -18,6 +18,7 @@ export const Detail={
     created(){
         this.type=this.$route.query.type
         this.billCode=this.$route.query.billCode;
+
         this.getOrdernodeInfo();
         this.getShow();
     },
@@ -57,7 +58,19 @@ export const Detail={
             this.$store.dispatch('getOrderInfo',{billCode:this.billCode})
                 .then(res=>{
                     this.showinfo=res;
-                    this.mapinit({longitude:this.showinfo.SendSiteDetail.longitude,latitude:this.showinfo.SendSiteDetail.latitude,netName:this.showinfo.SendSite},{longitude:this.showinfo.DeliverySiteDetail.longitude,latitude:this.showinfo.DeliverySiteDetail.latitude,netName:this.showinfo.DeliverySite})
+                    if(res.SendSiteDetail==null&&res.DeliverySiteDetail==null){
+                        this.NoneSaveMap()
+                    }else {
+                        var DeliveryObj=null;
+                        var SendSiteobj=null;
+                        if(res.DeliverySiteDetail){
+                            DeliveryObj={longitude:this.showinfo.DeliverySiteDetail.longitude,latitude:this.showinfo.DeliverySiteDetail.latitude,netName:this.showinfo.DeliverySite}
+                        }
+                        if(res.SendSiteDetail){
+                            SendSiteobj={longitude:this.showinfo.SendSiteDetail.longitude,latitude:this.showinfo.SendSiteDetail.latitude,netName:this.showinfo.SendSite};
+                        }
+                        this.mapinit(SendSiteobj,DeliveryObj)
+                    }
                 })
         },
 
@@ -120,7 +133,19 @@ export const Detail={
             return mySquare
         },
 
-        mapinit(statrt,end={longitude:'116.508328',latitude:'39.919141',netName:'杭州申通'},){
+
+        /*如果两个坐标都不存在*/
+        NoneSaveMap(){
+            var map = new BMap.Map("container");          // 创建地图实例
+            var point = new BMap.Point(116.404, 39.915);  // 创建点坐标
+            map.centerAndZoom(point, 15);
+        },
+
+
+
+
+        mapinit(statrt=null,end=null){
+
             var _self=this;
             var map = new BMap.Map('container');
 
@@ -137,54 +162,53 @@ export const Detail={
                 ]]
             });
 
-            var p1 = new BMap.Point(statrt.longitude,statrt.latitude);/*设置起点坐标这里也可以传文字*/
-            var p2 = new BMap.Point(end.longitude,end.latitude);/*终点*/
+            if(statrt&&end){
+                var p1 = new BMap.Point(statrt.longitude,statrt.latitude);/*设置起点坐标这里也可以传文字*/
+                var p2 = new BMap.Point(end.longitude,end.latitude);/*终点*/
+                /*调用规划路线插件*/
+                var driving = new BMap.DrivingRoute(map, {renderOptions:
+                    {
+                        map: map,
+                        autoViewport: false,
+                    },
+                    onPolylinesSet:function(routes) {
+                        let searchRoute = routes[0].getPolyline();//导航路线
+                        searchRoute.setStrokeColor('#FE7621')/*设置折现的颜色*/
+                        searchRoute.setStrokeOpacity(1)/*设置透明度*/
+                        searchRoute.setStrokeWeight(4)/*宽度*/
+                        map.addOverlay(searchRoute);
+                    },
+                });
 
-            /*调用规划路线插件*/
-            var driving = new BMap.DrivingRoute(map, {renderOptions:
-                {
-                    map: map,
-                    autoViewport: false,
-                },
-                onPolylinesSet:function(routes) {
-                    let searchRoute = routes[0].getPolyline();//导航路线
-                    searchRoute.setStrokeColor('#FE7621')/*设置折现的颜色*/
-                    searchRoute.setStrokeOpacity(1)/*设置透明度*/
-                    searchRoute.setStrokeWeight(4)/*宽度*/
-                    map.addOverlay(searchRoute);
-                },
-            });
-
-            /*查出规划路线*/
-            driving.search(p1, p2);
+                driving.search(p1, p2);
 
 
-            /*设置添加标注后的回调函数,规划路线回调*/
-            driving.setMarkersSetCallback(function (res) {
+                /*设置添加标注后的回调函数,规划路线回调*/
+                driving.setMarkersSetCallback(function (res) {
 
-                /*把起始点和终点的图标去除*/
-                var icon=new BMap.Icon(transparent,new BMap.Size(20,20))
-                res[0].marker.setIcon(icon)
-                res[1].marker.setIcon(icon)
+                    /*把起始点和终点的图标去除*/
+                    var icon=new BMap.Icon(transparent,new BMap.Size(20,20))
+                    res[0].marker.setIcon(icon)
+                    res[1].marker.setIcon(icon)
 
-                res[0].marker.addEventListener("click", function(){
-                    /*给起点加点击事件*/
+                    res[0].marker.addEventListener("click", function(){
+                        /*给起点加点击事件*/
+                    })
+
+                    /*
+                    添加自定义覆盖物
+                    type 1 是寄件 0 是收
+                    */
+
+                    var mySquare = _self.setMineBaidu(res[0].point, statrt.netName, 1);
+                    var mySquare1 = _self.setMineBaidu(res[1].point, end.netName, 0);
+
+                    map.addOverlay(mySquare);
+                    map.addOverlay(mySquare1);
                 })
 
-                /*
-                添加自定义覆盖物
-                type 1 是寄件 0 是收
-                */
-
-                var mySquare = _self.setMineBaidu(res[0].point, statrt.netName, 1);
-                var mySquare1 = _self.setMineBaidu(res[1].point, end.netName, 0);
-
-                map.addOverlay(mySquare);
-                map.addOverlay(mySquare1);
-            })
-
-            /*设置检索结束后的回调函数*/
-            driving.setSearchCompleteCallback(function(res){
+                /*设置检索结束后的回调函数*/
+                driving.setSearchCompleteCallback(function(res){
                     var marginss=[];
                     if(_self.type=='net'){
                         marginss=[100, 80, 80, 80]
@@ -195,9 +219,24 @@ export const Detail={
                     map.setViewport([p1,p2],{
                         margins: marginss
                     })
-            })
+                })
+
+            }else{
+                let longIP=statrt?statrt:end;
+                let type=statrt?1:0;
+                var pointss=new BMap.Point(longIP.longitude,longIP.latitude);
+
+                map.centerAndZoom(pointss,20);
+                var mySquare = _self.setMineBaidu(pointss, statrt.netName, type);
+                map.addOverlay(mySquare);
 
 
+                /*通过设置margin来平移视图*/
+                map.setViewport([pointss],{
+                    margins: [140, 80, 40, 80]
+                })
+
+            }
         },
 
         /*过滤物流状态*/

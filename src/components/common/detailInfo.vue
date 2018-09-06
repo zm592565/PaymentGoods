@@ -36,14 +36,23 @@
           </div>
           <div class="state_box">
               <div class="showinfo"v-if="expresslist&&expresslist.length">
-                      <div class="figure_box">
-                          <div class="figure_state">
+                      <div class="figure_box" v-if="showinfostate">
+
+                          <div class="figure_state" v-if="isElseState">
+                              <dl v-for="(item,index) in expresssateElselist" :key="index" :class="{'active':expressactive==index}">
+                                  <dt>{{item.name}}</dt>
+                                  <dd></dd>
+                              </dl>
+                          </div>
+                          <div class="figure_state" v-else>
                               <dl v-for="(item,index) in expresssatelist" :key="index" :class="{'active':expressactive==index}">
                                   <dt>{{item.name}}</dt>
                                   <dd></dd>
                               </dl>
                           </div>
+
                       </div>
+
                       <ul class="infolist">
                           <li v-for="(item,index) in expresslist" :class="{'active':index===0}">
                               <div class="info_date">

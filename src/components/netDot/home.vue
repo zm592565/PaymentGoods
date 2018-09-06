@@ -10,18 +10,19 @@
                       <h1 class="f_48">您好,</h1>
                       <p class="f_32">{{$store.state.userinfo.companyName}}</p>
                   </div>
-                  <div class="tools_btn">
-                      <!--<li class="tool" @click="actionmenushow=true"></li>-->
-                      <!--<li class="date" @click="$router.push({name:'selectdate'})"></li>-->
-                      <li class="tool" @click="$router.push({name:'noopen'})"></li>
-                      <li class="date" @click="$router.push({name:'noopen'})"></li>
-                  </div>
+                  <!--<div class="tools_btn">-->
+                      <!--&lt;!&ndash;<li class="tool" @click="actionmenushow=true"></li>&ndash;&gt;-->
+                      <!--&lt;!&ndash;<li class="date" @click="$router.push({name:'selectdate'})"></li>&ndash;&gt;-->
+                      <!--<li class="tool" @click="$router.push({name:'noopen'})"></li>-->
+                      <!--<li class="date" @click="$router.push({name:'noopen'})"></li>-->
+                  <!--</div>-->
               </div>
               <div class="text_white show_box f_28">
                   <h1 class="f_48">{{allCount}}</h1>
                   <p class="f_28 text_c">网点总票数</p>
               </div>
-              <router-link tag="div" to="/receivingbill" class="row_box">
+              <!--<router-link tag="div" to="/receivingbill" class="row_box">-->
+              <div class="row_box">
                   <div>
                       <h1 class="f_48 text_main"><cite class="pr_10 f_24">¥</cite><span class="f_bold">{{SendAmount}}</span></h1>
                       <p class="f_24">
@@ -34,7 +35,7 @@
                       </p>
                       <p class="f_24 text_999 pt_20">{{endTime|changeDate}}</p>
                   </div>
-              </router-link>
+              </div>
               <div class="row_box">
                   <div>
                       <h1 class="f_48 text_main"><cite class="pr_10 f_24">¥</cite><span class="f_bold">{{DeliveryAmount}}</span></h1>
@@ -70,7 +71,7 @@
               <div class="list_box" ref="list_box">
                   <vue-better-scroll v-if="tabsearchactive==0" ref="scroll" style="height: 100%" :scrollbar="scrollbarObj"  :pullDownRefresh="pullDownRefreshObj" :pullUpLoad="allpullUpLoadObj" :startY="parseInt(startY)"  @pullingDown="onPullingDown" @pullingUp="onPullingUp">
                       <router-link tag="li" :to="{name:'detail',query:{billCode:item.BillCode,type:'net'}}" v-if="alllist" v-for="(item,index) in alllist" :key="index">
-                          <div :class="['tag_box',{'get_box':item.SiteType=='收'},{'send_box':item.SiteType=='寄'}]"></div>
+                          <div :class="['tag_box',{'get_box':item.SiteType=='派'},{'send_box':item.SiteType=='寄'}]"></div>
                           <div class="tag">
                               <div>
                                   <p class="f_28 text_333">运单号：{{item.BillCode}}</p>
@@ -88,7 +89,7 @@
 
                   <vue-better-scroll v-if="tabsearchactive==1" ref="scroll" style="height: 100%" :scrollbar="scrollbarObj"  :pullDownRefresh="pullDownRefreshObj" :pullUpLoad="receiveNotpullUpLoadObj" :startY="parseInt(startY)"  @pullingDown="onPullingDown" @pullingUp="onPullingUp">
                       <router-link tag="li" :to="{name:'detail',query:{billCode:item.BillCode,type:'net'}}" v-if="receiveNotlist" v-for="(item,index) in receiveNotlist" :key="index">
-                          <div :class="['tag_box',{'get_box':item.SiteType=='收'},{'send_box':item.SiteType=='寄'}]"></div>
+                          <div :class="['tag_box',{'get_box':item.SiteType=='派'},{'send_box':item.SiteType=='寄'}]"></div>
                           <div class="tag">
                               <div>
                                   <p class="f_28 text_333">运单号：{{item.BillCode}}</p>
@@ -105,7 +106,7 @@
 
                   <vue-better-scroll v-if="tabsearchactive==2" ref="scroll" style="height: 100%" :scrollbar="scrollbarObj"  :pullDownRefresh="pullDownRefreshObj" :pullUpLoad="collectedpullUpLoadObj" :startY="parseInt(startY)"  @pullingDown="onPullingDown" @pullingUp="onPullingUp">
                       <router-link tag="li" :to="{name:'detail',query:{billCode:item.BillCode,type:'net'}}" v-if="collectedlist" v-for="(item,index) in collectedlist" :key="index">
-                          <div :class="['tag_box',{'get_box':item.SiteType=='收'},{'send_box':item.SiteType=='寄'}]"></div>
+                          <div :class="['tag_box',{'get_box':item.SiteType=='派'},{'send_box':item.SiteType=='寄'}]"></div>
                           <div class="tag">
                               <div>
                                   <p class="f_28 text_333">运单号：{{item.BillCode}}</p>
@@ -122,7 +123,7 @@
 
                   <vue-better-scroll v-if="tabsearchactive==3" ref="scroll" style="height: 100%" :scrollbar="scrollbarObj"  :pullDownRefresh="pullDownRefreshObj" :pullUpLoad="returnpullUpLoadObj" :startY="parseInt(startY)"  @pullingDown="onPullingDown" @pullingUp="onPullingUp">
                       <router-link tag="li" :to="{name:'detail',query:{billCode:item.BillCode,type:'net'}}" v-if="returnlist" v-for="(item,index) in returnlist" :key="index">
-                          <div :class="['tag_box',{'get_box':item.SiteType=='收'},{'send_box':item.SiteType=='寄'}]"></div>
+                          <div :class="['tag_box',{'get_box':item.SiteType=='派'},{'send_box':item.SiteType=='寄'}]"></div>
                           <div class="tag">
                               <div>
                                   <p class="f_28 text_333">运单号：{{item.BillCode}}</p>
@@ -136,6 +137,9 @@
                       </router-link>
                       <div v-if="tabsearchactive==3&&returnpagestate" style="font-size: 12px;text-align: center;color: #999;padding-top: 20px;padding-bottom: 20px">没有更多了...</div>
                   </vue-better-scroll>
+                  <li>
+                      <div class="tag_box get_box">1321</div>
+                  </li>
 
               </div>
 

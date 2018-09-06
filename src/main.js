@@ -64,29 +64,17 @@ new Vue({
                       break
               }
 
-        }
+              /*调用中国省区*/
+              // this.$store.dispatch('searchArealist',{})
+              //     .then(res=>{
+              //         this.$store.commit('searchChinaArealist',res)
+              //     })
+
+
+          }
       );
 
-      /*调用中国省区*/
-      // this.$store.dispatch('searchArealist',{})
-      //     .then(res=>{
-      //         this.$store.commit('searchChinaArealist',res)
-      //     })
 
-
-      /*正式则删除*/
-      // switch (store.state.userinfo.companyCategoryCode){
-      //     case '总公司':
-      //     case '部门':
-      //         _self.$router.push({name:'company'})
-      //         break;
-      //     case '独立网点':
-      //         _self.$router.push({name:'home'})
-      //         break;
-      //     default:
-      //         _self.$Tools.TestTost('无访问权限...');
-      //         break
-      // }
 
   },
     scrollBehavior (to, from, savedPosition) {

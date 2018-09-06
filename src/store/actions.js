@@ -17,15 +17,15 @@ const action={
     /*检索省市区县根据父id*/
     searchArealist(context,{parentId=86}){
         /*axios配置*/
-        let obj={
-            baseURL: Common_API.uploadUrl,/*测试接口地址*/
-            retry: 4,
-            retryDelay: 1000,
-            timeout: 20000,
-            withCredentials:true,
-            headers: {'Content-Type': 'application/json','source':'jn','clientType':'H5'},
-        }
-        return functions.requestHttpMethods(Common_API.Chinaarealist+parentId,null,false,'get',obj)
+        // let obj={
+        //     baseURL: Common_API.uploadUrl,/*测试接口地址*/
+        //     retry: 4,
+        //     retryDelay: 1000,
+        //     timeout: 20000,
+        //     withCredentials:true,
+        //     headers: {'Content-Type': 'application/json','source':'jn','clientType':'H5'},
+        // }
+        return functions.requestHttpMethods(Common_API.Chinaarealist+parentId,null,false,'get')
             .then(res=>{
                 if(res.respCode=='000'){
                     return Promise.resolve(res.data)
@@ -96,6 +96,7 @@ const action={
     getOrderInfo(context,{billCode,siteType='S'}){
         return functions.requestHttpMethods(PageApi.orderInfo,{billCode,siteType},false,'get')
             .then(res=>{
+                console.info(res,'运单详情')
                 if(res.respCode=='000'){
                     return Promise.resolve(res.data)
                 }else{

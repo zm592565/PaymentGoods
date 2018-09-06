@@ -91,22 +91,37 @@ export const CompanyMixin={
         }
     },
     created(){
-        /*默认查今日的数据*/
-        this.$store.dispatch('getCompanyBillAll',{siteId:this.$store.state.userinfo.companyid,beginTime:this.beginTime,endTime:this.endTime,province:this.homeprovince,city:this.homecity})
-            .then(res=>{
-                this.SendAmount=res.SendAmount;
-                this.SendCount=res.SendCount
-                this.DeliveryAmount=res.DeliveryAmount
-                this.DeliveryCount=res.DeliveryCount
-            })
+        this.getsearchToday();
 
     },
+
+    watch:{
+        'tabactive':function (value) {
+            if(value===0){
+                this.getsearchToday();
+            }
+        }
+    },
+
     computed:{
         allCount:function(){
             return this.SendCount+this.DeliveryCount;
         }
     },
     methods:{
+
+        /*查询今日数据*/
+        getsearchToday(){
+            /*默认查今日的数据*/
+            this.$store.dispatch('getCompanyBillAll',{siteId:this.$store.state.userinfo.companyid,beginTime:this.beginTime,endTime:this.endTime,province:this.homeprovince,city:this.homecity})
+                .then(res=>{
+                    this.SendAmount=res.SendAmount;
+                    this.SendCount=res.SendCount
+                    this.DeliveryAmount=res.DeliveryAmount
+                    this.DeliveryCount=res.DeliveryCount
+                })
+        },
+
         getActiveTabindex(index){
             this.tabactive=index;
             if(index===1){
@@ -165,7 +180,8 @@ export const CompanyMixin={
                 var state=this.searchlist[tabsearchactiveIndex].value;
                 /*省市不传则为全网*/
                 this.$store.dispatch('getListCompany',{
-                    siteId:_self.$store.state.userinfo.companyId,
+                    // siteId:_self.$store.state.userinfo.companyId,/*指点网点的时候传，全部则传空*/
+                    siteId:'',
                     beginTime:_self.searchbeginTime,
                     endTime:_self.searchendTime,
                     province:_self.searchprovince,
@@ -426,21 +442,33 @@ export const NetDotMixin={
         }
     },
     created(){
-        this.$store.dispatch('getNetDotBill',{siteId:this.$store.state.userinfo.companyId,beginTime:this.beginTime,endTime:this.endTime})
-            .then(res=>{
-                this.SendAmount=res.SendAmount;
-                this.SendCount=res.SendCount
-                this.DeliveryAmount=res.DeliveryAmount
-                this.DeliveryCount=res.DeliveryCount
-            })
+        this.getsearchToday();
     },
     computed:{
         allCount:function(){
             return this.SendCount+this.DeliveryCount;
         }
     },
-
+    watch:{
+        'tabactive':function (value) {
+            if(value===0){
+                this.getsearchToday();
+            }
+        }
+    },
     methods:{
+        /*查询今日数据*/
+        getsearchToday(){
+            /*默认查今日的数据*/
+            this.$store.dispatch('getNetDotBill',{siteId:this.$store.state.userinfo.companyId,beginTime:this.beginTime,endTime:this.endTime})
+                .then(res=>{
+                    this.SendAmount=res.SendAmount;
+                    this.SendCount=res.SendCount
+                    this.DeliveryAmount=res.DeliveryAmount
+                    this.DeliveryCount=res.DeliveryCount
+                })
+        },
+
         getActiveTabindex(index){
             this.tabactive=index;
             if(index===1){
